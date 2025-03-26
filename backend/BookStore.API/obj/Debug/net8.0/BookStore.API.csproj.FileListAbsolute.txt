@@ -68,3 +68,4 @@
 /Users/carsonconnors/Desktop/mission11/backend/BookStore.API/obj/Debug/net8.0/BookStore.API.pdb
 /Users/carsonconnors/Desktop/mission11/backend/BookStore.API/obj/Debug/net8.0/BookStore.API.genruntimeconfig.cache
 /Users/carsonconnors/Desktop/mission11/backend/BookStore.API/obj/Debug/net8.0/ref/BookStore.API.dll
+/Users/carsonconnors/Desktop/mission11/backend/BookStore.API/obj/Debug/net8.0/BookStore.API.sourcelink.json

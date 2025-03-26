@@ -11,7 +11,7 @@ function BookList() {
   useEffect(() => {
     const fetchBooks = async () => {
       const response = await fetch(
-        `https://localhost:5000/api/Book/Books?pageSize=${pageSize}&pageNumber=${pageNumber}`
+        `https://localhost:5000/api/Book?pageSize=${pageSize}&pageNumber=${pageNumber}`
       );
       const data = await response.json();
       setBooks(data.books);
@@ -31,28 +31,56 @@ function BookList() {
           <h2 className="card-title">{book.title}</h2>
           <div className="card-body">
             <ul className="list-unstyled">
-              <li><strong>Author:</strong> {book.author}</li>
-              <li><strong>Publisher:</strong> {book.publisher}</li>
-              <li><strong>ISBN:</strong> {book.isbn}</li>
-              <li><strong>Classification:</strong> {book.classification}</li>
-              <li><strong>Category:</strong> {book.category}</li>
-              <li><strong>Page Count:</strong> {book.pageCount}</li>
-              <li><strong>Price:</strong> ${book.price}</li>
+              <li>
+                <strong>Author:</strong> {book.author}
+              </li>
+              <li>
+                <strong>Publisher:</strong> {book.publisher}
+              </li>
+              <li>
+                <strong>ISBN:</strong> {book.isbn}
+              </li>
+              <li>
+                <strong>Classification:</strong> {book.classification}
+              </li>
+              <li>
+                <strong>Category:</strong> {book.category}
+              </li>
+              <li>
+                <strong>Page Count:</strong> {book.pageCount}
+              </li>
+              <li>
+                <strong>Price:</strong> ${book.price}
+              </li>
             </ul>
           </div>
         </div>
       ))}
 
       <div className="my-3">
-        <button disabled={pageNumber === 1} onClick={() => setPageNumber(pageNumber - 1)}>Previous</button>
+        <button
+          disabled={pageNumber === 1}
+          onClick={() => setPageNumber(pageNumber - 1)}
+        >
+          Previous
+        </button>
 
         {[...Array(totalPages)].map((_, index) => (
-          <button key={index + 1} onClick={() => setPageNumber(index + 1)} disabled={index + 1 === pageNumber}>
+          <button
+            key={index + 1}
+            onClick={() => setPageNumber(index + 1)}
+            disabled={index + 1 === pageNumber}
+          >
             {index + 1}
           </button>
         ))}
 
-        <button disabled={pageNumber === totalPages} onClick={() => setPageNumber(pageNumber + 1)}>Next</button>
+        <button
+          disabled={pageNumber === totalPages}
+          onClick={() => setPageNumber(pageNumber + 1)}
+        >
+          Next
+        </button>
       </div>
 
       <label>
