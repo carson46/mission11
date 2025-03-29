@@ -10,11 +10,27 @@ namespace BookStore.API.Controllers
     {
         private BookDbContext _bookContext;
         public BookController(BookDbContext temp) => _bookContext = temp;
+        
+        [HttpGet("GetProjectTypes")]
+        public IActionResult GetBookTypes(int id)
+        {
+            var bookTypes = _bookContext.Books
+                .Select(b => b.Category)
+                .Distinct()
+                .ToList();
+            
+            return Ok(bookTypes);
+        }
 
         [HttpGet]
-        public IActionResult GetBooks(string sortOrder = "asc", int pageSize = 5, int pageNumber = 1)
+        public IActionResult GetBooks(string sortOrder = "asc", int pageSize = 5, int pageNumber = 1, [FromQuery] List<string>? bookTypes = null)
         {
-            IQueryable<Books> query = _bookContext.Books;
+            IQueryable<Books> query = _bookContext.Books.AsQueryable();
+
+            if (bookTypes != null && bookTypes.Any())
+            {
+                query = query.Where(b => bookTypes.Contains(b.Category)); 
+            }
 
             // Sorting logic
             query = sortOrder.ToLower() == "desc"
@@ -27,7 +43,7 @@ namespace BookStore.API.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var totalBooks = _bookContext.Books.Count();
+            var totalBooks = query.Count();
 
             return Ok(new
             {
@@ -35,16 +51,5 @@ namespace BookStore.API.Controllers
                 TotalBooks = totalBooks
             });
         }
-
-
-        
-        // [HttpGet("Title/{title}")]
-        // public IEnumerable<Books> Book()
-        // {
-        //     var something = _bookContext.Books.Where(p => p.ProjectFunctionalityStatus == "Functional").ToList();
-        //     return something;
-        // }
     }
-
-    
 }
