@@ -3,34 +3,44 @@ import { useEffect, useState } from 'react';
 import { Book } from '../types/Books';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { fetchBooks } from '../api/BooksAPI';
+import Pagination from './Pagination';
 
 function BookList({ selectedCategories }: { selectedCategories: string[] }) {
   const [books, setBooks] = useState<Book[]>([]);
   const [pageSize, setPageSize] = useState<number>(5);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [totalItems, setTotalItems] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const navigate = useNavigate();
   const { cart } = useCart();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const bookTypeParams = selectedCategories
-      .map((type) => `bookTypes=${encodeURIComponent(type)}`)
-      .join('&');
-
-    const fetchBooks = async () => {
-      const response = await fetch(
-        `https://localhost:5000/api/Book?pageSize=${pageSize}&pageNumber=${pageNumber}${
-          selectedCategories.length > 0 ? '&' + bookTypeParams : ''
-        }`
-      );
-      const data = await response.json();
-      setBooks(data.books);
-      setTotalItems(data.totalBooks);
-      setTotalPages(Math.ceil(data.totalBooks / pageSize));
+  
+    const loadBooks = async () => {
+        try {
+          setLoading(true);
+          const data = await fetchBooks(pageSize, pageNumber, selectedCategories);
+        
+          setBooks(data.books);
+          setTotalPages(Math.ceil(data.totalBooks / pageSize));
+        } catch (error) {
+          setError((error as Error).message);
+        } finally {
+          setLoading(false);
+        }
     };
-    fetchBooks();
+
+    loadBooks();
   }, [pageSize, pageNumber, selectedCategories]);
+
+  if (loading) {
+    return <div className="text-center">Loading...</div>;
+  }
+  if (error) {
+    return <div className="alert alert-danger text-center">{error}</div>;
+  }
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
@@ -72,53 +82,17 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
           </div>
         ))}
       </div>
-
-      <div className="my-4">
-        <div className="btn-group" role="group">
-          <button
-            className="btn btn-secondary"
-            disabled={pageNumber === 1}
-            onClick={() => setPageNumber(pageNumber - 1)}
-          >
-            Previous
-          </button>
-
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index + 1}
-              className={`btn ${index + 1 === pageNumber ? 'btn-primary' : 'btn-outline-primary'}`}
-              onClick={() => setPageNumber(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-
-          <button
-            className="btn btn-secondary"
-            disabled={pageNumber === totalPages}
-            onClick={() => setPageNumber(pageNumber + 1)}
-          >
-            Next
-          </button>
-        </div>
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="pageSizeSelect" className="form-label">Results per page:</label>
-        <select
-          id="pageSizeSelect"
-          className="form-select w-auto"
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-            setPageNumber(1);
-          }}
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={20}>20</option>
-        </select>
-      </div>
+      <Pagination
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPageNumber}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setPageNumber(1);
+        }}
+      />
+      
     </>
   );
 }

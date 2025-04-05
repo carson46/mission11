@@ -4,6 +4,7 @@ import React from 'react';
 import PurchasePage from './pages/PurchasePage';
 import CartPage from './pages/Cart';
 import { CartProvider } from './context/CartContext';
+import AdminProjectsPage from './pages/AdminBooksPage';
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
           <Route path="/books" element={<BooksPage />} />
           <Route path="/purchase/:title/:bookID" element={<PurchasePage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path='/adminBooks' element={<AdminProjectsPage />} />
         </Routes>
       </Router>
     </CartProvider>
@@ -23,3 +25,4 @@ function App() {
 }
 
 export default App;
+ 
