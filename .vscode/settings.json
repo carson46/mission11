@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "undefined/subscriptions/ad143b05-9569-489a-95ed-3cf5f2426dd6/resourceGroups/appsvc_windows_eastus/providers/Microsoft.Web/sites/BookStore-Connors-Backend",
+  "appService.deploySubpath": "backend/BookStore.API/publish"
+}

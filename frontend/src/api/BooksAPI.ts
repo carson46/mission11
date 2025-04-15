@@ -1,7 +1,7 @@
 // ✅ BooksAPI.ts
 import { Book } from '../types/Books';
 
-const baseUrl = 'https://localhost:5000/api/Book';
+const baseUrl = 'https://bookstore-connors-backend-acd9c4axf2fngxhf.eastus-01.azurewebsites.net/Book';
 
 interface FetchBooksResponse {
   books: Book[];
