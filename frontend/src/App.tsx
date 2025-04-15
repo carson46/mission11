@@ -1,6 +1,5 @@
 import BooksPage from './pages/BooksPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React from 'react';
 import PurchasePage from './pages/PurchasePage';
 import CartPage from './pages/Cart';
 import { CartProvider } from './context/CartContext';

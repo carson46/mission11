@@ -10,7 +10,7 @@ const AdminProjectsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // ✅ Fix: useState instead of const
+  const [selectedCategories] = useState<string[]>([]); // ✅ Fix: useState instead of const
   const [pageSize, setPageSize] = useState<number>(5);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [showForm, setShowForm] = useState(false);
